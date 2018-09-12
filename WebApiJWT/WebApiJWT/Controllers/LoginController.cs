@@ -5,6 +5,7 @@ using System.Web.Http;
 using WebApiJWT.Classes;
 using WebApiJWT.Models;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace WebApiJWT.Controllers
 {
@@ -43,22 +44,31 @@ namespace WebApiJWT.Controllers
             usuario = db.Usuario.Where(x => x.NombreUsuario == login.username).First();
 
             if (usuario == null)
+            {
                 return NotFound();
-            var contraseña = db.Usuario.SqlQuery("select Cast(DecryptByPassPhrase('@NombreUsuario', @Contraseña) As varchar(200)) As 'password' from Usuario",usuario);
-            
+            }
 
-            //bool isCredentialValid = (login.password == contraseña);
-            //if (isCredentialValid)
-            //{
-            //    var token = TokenGenerator.GenerateTokenJwt(login.Username);
-            //    return Ok(token);
-            //}
-            //else
-            //{
-            //    return Unauthorized();
-            //}
-            //return Ok(token);
-            return Ok();
+            using (MD5 md5Hash = MD5.Create())
+            {
+
+                var md5 = new Md5Encrypt();
+                string contraseña =  md5.GetMd5Hash(md5Hash, login.password);
+
+                bool isCredentialValid = (contraseña.ToUpper()  == usuario.Contraseña);
+                if (isCredentialValid)
+                {
+                    var token = TokenGenerator.GenerateTokenJwt(login.username);
+                    return Ok(token);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+
+
+            }
+
+
         }
     }
 }

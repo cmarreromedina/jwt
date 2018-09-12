@@ -17,6 +17,6 @@ namespace WebApiJWT.Models
         public short Codigo { get; set; }
         public string Usuario1 { get; set; }
         public string NombreUsuario { get; set; }
-        public byte[] Contraseña { get; set; }
+        public string Contraseña { get; set; }
     }
 }

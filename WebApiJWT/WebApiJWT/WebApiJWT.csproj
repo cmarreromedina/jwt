@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Classes\LoginRequest.cs" />
+    <Compile Include="Classes\Md5Encrypt.cs" />
     <Compile Include="Classes\TokenGenerator.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
